@@ -5,17 +5,13 @@ import reducer from './Main-reducer';
 
 export default function configureStore(history, initialState) {
   const reducers = {
-    mainReducer: reducer
+    mainReducer: reducer,
   };
 
-  const middleware = [
-    thunk,
-    routerMiddleware(history)
-  ];
-
+  const middleware = [thunk, routerMiddleware(history)];
   const rootReducer = combineReducers({
     ...reducers,
-    routing: routerReducer
+    routing: routerReducer,
   });
 
   return createStore(
