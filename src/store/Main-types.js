@@ -1,0 +1,15 @@
+﻿export const requestType = "REQUEST_STARTED";
+export const requestFailedType = "REQUEST_FAILED";
+export const loginPassedType = "LOGIN_SUCCESSFUL";
+export const logoutType = "LOGOUT";
+export const requestPassedType = "REQUEST_SUCCESSFUL";
+export const addEditItemPassedType = "ADD_EDIT_ITEM_SUCCESSFUL";
+export const toggleAddEditModalType = "TOGGLE_ADD_EDIT_MODAL";
+export const receivedProjectsType = "RECEIVED_PROJECTS";
+export const receivedArticlesType = "RECEIVED_ARTICLES";
+export const receivedItemsType = "RECEIVED_ITEMS";
+export const receivedFilteredItemsType = "RECEIVED_FILTERED_ITEMS";
+export const receivedBlogDates = "RECEIVED_BLOG_DATES";
+export const receivedItemType = "RECEIVED_ITEM";
+export const itemDeletedType = "ITEM_DELETED";
+export const changeActiveItemsType = "CHANGE_ACTIVE_ITEMS";

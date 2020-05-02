@@ -1,0 +1,14 @@
+.team-member-card {
+  align-items: center;
+  margin-top: 6rem;
+
+  .member-img {
+    border: 6px solid white;
+    height: 10rem;
+    width: 10rem;
+    margin-top: -5rem;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: top;
+  }
+}
