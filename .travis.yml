@@ -10,4 +10,4 @@ before_install:
   - yarn install
 
 script:
-  - docker run -e CI=true rozdolsky33/new-wave4-front-end npm run test --passWithNoTests
+  - docker run -e CI=true rozdolsky33/new-wave4-front-end npm run test
