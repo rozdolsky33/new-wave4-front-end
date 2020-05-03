@@ -6,7 +6,7 @@ COPY yarn.lock ./
 RUN yarn install
 COPY . .
 
-RUN yarn run
+RUN yarn build
 
 #stage 2
 FROM nginx
