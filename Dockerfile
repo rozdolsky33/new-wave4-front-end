@@ -6,6 +6,7 @@ COPY yarn.lock ./
 RUN yarn install
 COPY . .
 
+RUN npm install react-scripts -g --silent
 RUN yarn run build
 
 #stage 2
