@@ -1,5 +1,5 @@
 #stage 1
-FROM node:alpine
+FROM node:alpine as builder
 
 WORKDIR '/app'
 COPY yarn.lock ./
@@ -11,4 +11,4 @@ RUN yarn run
 #stage 2
 FROM nginx
 EXPOSE 80
-COPY --from=0 /app/build /usr/share/nginx/html
+COPY --from=builder /app/build /usr/share/nginx/html
