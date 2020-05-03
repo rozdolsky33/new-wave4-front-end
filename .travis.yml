@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-  - "stable"
+  - 'stable'
 services:
   - docker
 before_install:
@@ -11,3 +11,16 @@ before_install:
 
 script:
   - docker run -e CI=true rozdolsky33/new-wave4-front-end npm run test
+
+deploy:
+  provider: elasticbeanstalk
+  region: 'us-east-1'
+  app: 'new-wave4.org'
+  env: 'NewWave4org-env'
+  bucket_name: 'elasticbeanstalk-us-east-1-651261648885'
+  bucket_path: 'new-wave4.org'
+  on:
+    branch: develop
+  access_key_id: '$AWS_ACCESS_KEY'
+  secret_access_key:
+    secure: '$AWS_SECRET_KEY'
