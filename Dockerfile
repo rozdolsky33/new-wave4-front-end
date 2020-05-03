@@ -9,7 +9,7 @@ RUN npm install react-scripts -g --silent
 
 # RUN yarn run build
 
-RUN yarn build
+RUN yarn run build
 
 #stage 2
 FROM nginx
