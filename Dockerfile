@@ -9,6 +9,7 @@ COPY . .
 RUN npm run build
 
 #stage 2
+
 FROM nginx
 COPY --from=builder /app/build /usr/share/nginx/html
 
