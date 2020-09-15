@@ -10,7 +10,7 @@ function ContactUsPage() {
     <Col className="text-center" xs md={{ span: 8, offset: 2 }}>
       <div>
         <Row className="justify-content-center">
-          <h3 className="p-3 text-primary">{i18n.t("contact-us.title")}</h3>
+          <h3 className="p-3 text-secondary">{i18n.t("contact-us.title")}</h3>
         </Row>
         <Row>
           <Col>

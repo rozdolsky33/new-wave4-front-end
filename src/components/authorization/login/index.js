@@ -15,7 +15,7 @@ class LoginPage extends React.Component {
   render() {
     return (
       <Col className="text-center" xs md={{ span: 8, offset: 2 }}>
-        <h2 className="p-3 text-primary">{i18n.t("login.title")}</h2>
+        <h2 className="p-3 text-secondary">{i18n.t("login.title")}</h2>
         <Form onSubmit={(e) => this.login(e)} className="text-left">
           <Form.Group controlId="email">
             <Form.Label>{i18n.t("login.email")}</Form.Label>
@@ -29,12 +29,12 @@ class LoginPage extends React.Component {
         </Form>
         {!!this.props.errorMessage && (
           <Alert variant="danger" className="mt-3">
-            {this.props.errorMessage}
+            {i18n.t(this.props.errorMessage)}
           </Alert>
         )}
         <div className="d-flex justify-content-between">
-          <Button variant="link" href="/registration">{i18n.t("login.registration")}</Button>
-          <Button variant="link" href="/forgot-password">{i18n.t("login.forgot-pass")}</Button>
+          <Button variant="light" href="/registration">{i18n.t("login.registration")}</Button>
+          <Button variant="light" href="/forgot-password">{i18n.t("login.forgot-pass")}</Button>
         </div>
       </Col>
     );

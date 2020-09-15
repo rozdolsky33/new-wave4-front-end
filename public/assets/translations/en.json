@@ -16,15 +16,42 @@
     "donate": "Donate"
   },
   "main": {
-    "title": "New Wave",
-    "description": "New Ukrainian Wave All-American Non-Governmental Organization is a national-patriotic and educational-cultural non-governmental organization.",
+    "title": "Ukrainian New Wave",
+    "description": "The All-American Organization “New Ukrainian Wave” (below as NUW) is a voluntary charitable, national, patriotic, educational and cultural non-profit organization established on the basis of the common interests of the Ukrainian immigrants of the latest emigrational “wave”, both citizens of Ukraine and ethnical Ukrainians who are the citizens of other countries, who accept the goals and major principles of this organization",
     "new-projects": "Our projects",
     "no-projects": "No projects yet",
     "new-articles": "Blogs",
     "no-articles": "No articles yet"
   },
   "our-team": {
-    "title": "Our team"
+    "title": "Our team",
+    "team-members": {
+      "BohdanBohonok": {
+        "fullName": "Bohdan Bohonok",
+        "location": "Pittsburgh, PA",
+        "position": "Vice President"
+      },
+      "MyroslavaRozdolska": {
+        "fullName": "Myroslava Rozdolska",
+        "location": "New York",
+        "position": "President"
+      },
+      "LarysaZanyk": {
+        "fullName": "Larysa Zanyk",
+        "location": "New York",
+        "position": "Director of Educational Program"
+      },
+      "OlgaHrynyk": {
+        "fullName": "Olha Hrynyk",
+        "location": "Brooklyn, NY",
+        "position": "Head of Brooklyn Department"
+      },
+      "OstapStahiv": {
+        "fullName": "Ostap Stakhiv",
+        "location": "Cleveland, OH",
+        "position": "Director of Culture Program"
+      }
+    }
   },
   "history": {
     "title": "Historical events",
@@ -55,7 +82,7 @@
     "org-contact-1": "Myroslava Rozdolska (347) 420-7678",
     "org-contact-2": "Larysa Zanyk (718) 509-7155",
     "org-email": "newwaveorg4@yahoo.com",
-    "name": "Your name",
+    "subject": "Subject",
     "email": "Your email",
     "btn-send": "Send an email"
   },
@@ -69,7 +96,8 @@
     "read-more": "Read more..."
   },
   "post": {
-    "comment": "Comment",
+    "comment": "Your comment",
+    "comments": "Comments",
     "leave-comment": "Add Comment",
     "action-is-disabled": "Action is impossible",
     "you-should-be-logged-in": "You should log in at first to perform the action",
@@ -81,11 +109,14 @@
     "sub-title-2": "Donations and gifts are deductible to the full extent allowable under IRS regulations",
     "donate-by": "Donate by ",
     "check": "check",
-    "name": "Your name",
+    "name": "Your full name",
     "email": "Your email",
+    "amount": "Amount",
     "card-number": "Card number",
-    "valid-till": "Valid till (month/year)",
+    "valid-till-month": "Expiration Month",
+    "valid-till-year": "Expiration Year",
     "cvc": "CVC-code",
+    "full-amount": "Full amount:",
     "btn-donate": "Donate"
   },
   "login": {
@@ -94,23 +125,21 @@
     "password": "Password",
     "btn-login": "Login",
     "registration": "Registrate",
-    "forgot-pass": "Forgot password"
+    "forgot-pass": "Reset Password"
   },
   "registration": {
     "title": "Registration",
-    "first-name": "First name",
-    "last-name": "Last name",
-    "email": "Email",
     "password": "Password",
     "btn-register": "Registrate"
   },
   "forgot-password": {
-    "title": "Password recover",
+    "title": "Password recovery",
     "email": "Email",
     "btn-submit": "Submit"
   },
   "reset-password": {
     "title": "Password reset",
+    "title-for-admin-role": "Set password for admin",
     "password": "Password",
     "password-confirm": "Please enter your password once again",
     "btn-submit": "Submit"
@@ -128,18 +157,53 @@
     "project": "project",
     "picture": "Picture",
     "category": "Category",
-    "content": "Short content",
-    "preview": "Main content",
-    "btn-close": "Close",
-    "btn-submit": "Submit"
+    "role": "Admin",
+    "active": "Active",
+    "actions": "Actions",
+    "content": "Main content",
+    "external-resource": "External resource",
+    "external-url": "Link",
+    "preview": "Short content",
+    "set-admin-role": "Enter the email of a user, which you want to make an admin",
+    "btn-set-admin-role": "Give admin rights"
   },
   "error": {
+    "invalid-url": "This link isn't valid any longer",
     "page-is-not-ready": "This page isn't ready yet",
-    "common": "Something went wrong, error code - "
+    "common": "Something went wrong :(",
+    "no-session": "You should login at first and then try again",
+    "wrong-creds": "Check you login and password"
+  },
+  "message": {
+    "action-approved": "Your action was successfully approved",
+    "registration-success": "Successful registration. Please check your email for confirmation",
+    "reset-password-request": "We have sent you an email to restore your password",
+    "reset-password-success": "You successfully changed your password",
+    "admin-role-email-sent": "We have sent an email for the user",
+    "donation-success": "We are very grateful for your contribution into Ukrainian New Wave life"
   },
   "common": {
-    "cancel": "Cancel",
+    "btn-cancel": "Cancel",
+    "btn-close": "Close",
+    "btn-submit": "Submit",
+    "email": "Email",
+    "first-name": "First name",
+    "last-name": "Last name",
     "status-error": "Error",
-    "status-success": "Success"
+    "status-success": "Success",
+    "months": {
+      "01" : "Jan",
+      "02" : "Feb",
+      "03" : "Mar",
+      "04" : "Apr",
+      "05" : "May",
+      "06" : "Jun",
+      "07" : "Jul",
+      "08" : "Aug",
+      "09" : "Sept",
+      "10" : "Oct",
+      "11" : "Nov",
+      "12" : "Dec"
+    }
   }
 }

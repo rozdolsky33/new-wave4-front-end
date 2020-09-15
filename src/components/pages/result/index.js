@@ -21,12 +21,12 @@ class ResultPage extends React.Component {
           <>
             <img src={errorImg} style={{width:80}} alt=""/>
             <h2 className="p-3">{i18n.t("common.status-error")}</h2>
-            <p>{this.props.errorMessage}</p>
+            <p>{i18n.t(this.props.errorMessage)}</p>
           </> :
           <>
             <img src={successImg} style={{width:80}} alt=""/>
             <h2 className="p-3">{i18n.t("common.status-success")}</h2>
-            <p>{this.props.successMessage}</p>
+            <p>{i18n.t(this.props.successMessage)}</p>
           </>}
       </Col>
     );

@@ -1,4 +1,6 @@
+import Cookies from 'universal-cookie';
 export const host = 'http://162.212.158.14:8080';
+
 export const getParams = (methodType, useAuth) => {
   const params = {
     method: methodType,
@@ -9,7 +11,8 @@ export const getParams = (methodType, useAuth) => {
       'Content-Type': 'application/json',
     },
   };
-  const token = localStorage.getItem('token');
+  const cookies = new Cookies();
+  const token = cookies.get("token");
   if (!!token && !!useAuth) {
     params.headers.Authorization = token;
   }

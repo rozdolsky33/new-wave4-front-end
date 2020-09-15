@@ -1,6 +1,8 @@
 ﻿import * as actionType from "./Main-types";
 import { host } from "../utils";
+import Cookies from 'universal-cookie';
 
+const cookies = new Cookies();
 const initialState = {
   host,
   paginationConfig: {
@@ -10,6 +12,7 @@ const initialState = {
     size: 5,
     number: 0
   },
+  author: "",
   items: [],
   blog: [],
   project: [],
@@ -19,10 +22,11 @@ const initialState = {
   selectedItem: undefined,
   editMode: false,
   isLoading: false,
+  activeSession: false,
   successMessage: "",
   errorMessage: "",
   activeItems: "blog",
-  blogDates: [],
+  filterDates: [],
   user: undefined
 };
 
@@ -33,14 +37,34 @@ export default function reducer (state, action) {
       return {
         ...state,
         errorMessage: "",
-        isLoading: true
+        isLoading: true,
+        activeSession: cookies.get("token")
       };
     }
     case actionType.requestFailedType: {
+      if (action.errorCode && action.errorCode === 403) {
+        cookies.remove("token");
+        localStorage.removeItem('token');
+        localStorage.removeItem('role');
+        localStorage.removeItem('rights');
+        localStorage.removeItem('userId');
+        return {
+          ...state,
+          user: undefined,
+          errorMessage: 'error.no-session',
+          isLoading: false
+        };
+      }
       return {
         ...state,
-        errorMessage: action.errorMessage || `Something went wrong, error code - ${action.error}`,
+        errorMessage: action.errorMessage || 'error.common',
         isLoading: false
+      };
+    }
+    case actionType.clearErrorsType: {
+      return {
+        ...state,
+        errorMessage: ''
       };
     }
     case actionType.toggleAddEditModalType: {
@@ -61,13 +85,15 @@ export default function reducer (state, action) {
       return {
         ...state,
         user: action.user,
-        isLoading: false
+        isLoading: false,
+        activeSession: true
       };
     }
     case actionType.logoutType: {
       return {
         ...state,
-        user: undefined
+        user: undefined,
+        activeSession: false
       };
     }
     case actionType.requestPassedType: {
@@ -80,7 +106,7 @@ export default function reducer (state, action) {
     case actionType.receivedProjectsType: {
       return {
         ...state,
-        project: action.response.content.filter(project => project.active)
+        project: action.response.content.filter(project => project.active).forEach(i => {i.date = i.date.slice(0, -9)})
       };
     }
     case actionType.receivedCategoriesType: {
@@ -90,6 +116,8 @@ export default function reducer (state, action) {
       };
     }
     case actionType.receivedItemsType: {
+      const newItems = action.response.content.filter(project => project.active);
+      newItems.forEach(i => {i.date = i.date.slice(0, -9)});
       return {
         ...state,
         paginationConfig: {
@@ -99,11 +127,13 @@ export default function reducer (state, action) {
           size: action.response.size,
           number: action.response.number
         },
-        items: action.addResToList ? [...state.items, ...action.response.content] : action.response.content,
+        items: action.addResToList ? [...state.items, ...newItems] : newItems,
         isLoading: false
       };
     }
     case actionType.receivedArticlesType: {
+      const newItems = action.response.content.filter(project => project.active);
+      newItems.forEach(i => {i.date = i.date.slice(0, -9)});
       return {
         ...state,
         paginationConfig: {
@@ -113,21 +143,14 @@ export default function reducer (state, action) {
           size: action.response.size,
           number: action.response.number
         },
-        blog: state.blog.concat(action.response.content),
+        blog: state.blog.concat(newItems),
         isLoading: false
       };
     }
-    case actionType.receivedBlogDates: {
+    case actionType.receivedFilterDates: {
       return {
         ...state,
-        blogDates: action.response.reverse().map(date => {
-          const tempDate = new Date(date);
-          return {
-            year: tempDate.getFullYear(),
-            month: tempDate.toLocaleString('default', { month: 'long' }),
-            monthVal: tempDate.getMonth() + 1
-          }
-        })
+        filterDates: action.response.map(d => d.slice(0, -9))
       };
     }
     case actionType.changeActiveItemsType: {
@@ -137,6 +160,12 @@ export default function reducer (state, action) {
       };
       newState.paginationConfig.number = 0;
       return newState
+    }
+    case actionType.receivedAuthor: {
+      return{
+        ...state,
+        author: action.author ? action.author.firstName + ' ' + action.author.lastName : '',
+      };
     }
     default: {
       return state;

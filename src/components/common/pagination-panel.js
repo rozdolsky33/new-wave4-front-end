@@ -17,5 +17,5 @@ export default function PaginationPanel (props) {
     return pagesList;
   };
 
-  return (<>{props.totalPages > 1 && <Pagination>{getPages()}</Pagination>}</>);
+  return (<>{props.totalPages > 1 && <Pagination className="m-0">{getPages()}</Pagination>}</>);
 }

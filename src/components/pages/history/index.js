@@ -6,7 +6,7 @@ import {withTranslation} from "react-i18next";
 function HistoryPage() {
   return (
     <Col className="text-center" xs md={{ span: 8, offset: 2 }}>
-      <h2 className="p-3 text-primary">{i18n.t("history.title")}</h2>
+      <h2 className="p-3 text-secondary">{i18n.t("history.title")}</h2>
       <p>{i18n.t("history.part-1")}</p>
       <p>{i18n.t("history.part-2")}</p>
       <p>{i18n.t("history.part-3")}</p>

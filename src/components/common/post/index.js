@@ -28,11 +28,14 @@ class ArticlePage extends React.Component {
       this.props.getComments("blog", this.props.match.params.id);
     }
   }
-  toggleLike() {
+  async toggleLike() {
+    let userLike = this.props.likes.find(l => l.userId === this.state.userId);
+    let likeId =  userLike ? userLike.id : undefined;
     if(!this.state.userId) {
       this.setState({showAlert: true});
     } else {
-      this.props.toggleLike("blog", this.props.match.params.id, this.state.userId, true);
+      await this.props.toggleLike("blog", this.props.match.params.id, this.state.userId, likeId);
+      this.props.getLikes("blog", this.props.match.params.id);
     }
   }
   async addComment(comment) {
@@ -52,36 +55,45 @@ class ArticlePage extends React.Component {
   }
   render() {
     return (
-      <Col className="text-center" xs md={{ span: 8, offset: 2 }}>
+      <Col xs md={{ span: 8, offset: 2 }}>
         {!this.props.selectedItem ||
           <>
-            {!!this.props.selectedItem.imageUri ?
-              <img style={{width: "100%", objectFit: "cover", maxHeight: "330px"}}
-                   src={this.props.host + "/v2/api/image/" + this.props.selectedItem.imageUri} /> :
-              <div className="bg-secondary w-100"><br/><br/><br/><br/><br/><br/><br/><br/><br/></div>
-            }
-            <h2 className="p-3 text-primary">{this.props.selectedItem.title}</h2>
+            <img style={{width: "100%", objectFit: "cover", maxHeight: "330px"}} alt={this.props.selectedItem.title}
+                 src={this.props.selectedItem.imageUri ? this.props.host + "/v2/api/image/" + this.props.selectedItem.imageUri :
+                   "../../assets/imgs/NW_post_placeholder.jpg"} />
+            <h2 className="p-3 text-center text-secondary">{this.props.selectedItem.title}</h2>
             <div className="d-flex justify-content-between pt-5 flex-column flex-md-row">
-              <div className="text-secondary order-2 order-md-1">
+              {this.props.match.params.type === "blog" ? <div className="text-secondary order-2 order-md-1">
                 <span className="mr-2">{new Date(this.props.selectedItem.date).toDateString()}</span>
-                <a onClick={this.toggleLike}><i className="fa fa-heart mr-1"></i>{this.props.likes.length}</a>
-                <a onClick={this.scrollToComments}><i className="fa fa-comment mr-1 ml-2"></i>{this.props.comments.length}</a>
-              </div>
+                <a onClick={this.toggleLike}
+                   className={this.props.likes.find(l => l.userId === this.state.userId) && "text-dark"}>
+                  <i className="fa fa-heart mr-1"></i>{this.props.likes.length}
+                </a>
+                <a onClick={this.scrollToComments}
+                   className={this.props.comments.find(c => c.userId === this.state.userId) && "text-dark"}>
+                  <i className="fa fa-comment mr-1 ml-2"></i>{this.props.comments.length}
+                </a>
+              </div> : <div></div>}
               <Button className="order-1 order-md-2" variant="link" onClick={() => {history.push("blog")}}>
                 {this.props.selectedItem.author}
               </Button>
             </div>
-            <p className="pt-3">{this.props.selectedItem.content}</p>
-            {this.props.match.params.type === "blog" && <div ref="postComments">
-              {this.props.comments.map((comment, key) =>
-                <Alert key={key} variant="secondary" className="text-left">
-                  {this.state.userRole.indexOf("ADMIN") >= 0 &&<button type="button" className="close"
-                          onClick={() => this.deleteComment(comment.id)}>x</button>}
-                  <b>{comment.username}</b>:&nbsp;{comment.content}
-                  <p className="small text-right mb-0 mt-2">{new Date(comment.postedDate).toDateString()}</p>
-                </Alert>)}
-              <CommentForm onSubmit={this.addComment}/>
-            </div>}
+            <div className="pt-3 content" dangerouslySetInnerHTML={{__html: this.props.selectedItem.content}}></div>
+            {this.props.match.params.type === "blog" &&
+              <>
+                <h5 className="pt-3 text-left">{i18n.t("post.comments")}</h5>
+                <div ref="postComments">
+                  {this.props.comments.map((comment, key) =>
+                    <Alert key={key} variant="light" className="text-left border-light">
+                      {(this.state.userRole.indexOf("ADMIN") >= 0 || comment.userId === this.state.userId) &&
+                      <button type="button" className="close"
+                              onClick={() => this.deleteComment(comment.id)}>x</button>}
+                      <b>{comment.username}</b>:&nbsp;{comment.content}
+                      <p className="small text-right mb-0 mt-2">{new Date(comment.postedDate).toDateString()}</p>
+                    </Alert>)}
+                  {!this.props.isLoading && <CommentForm onSubmit={this.addComment}/>}
+                </div>
+              </>}
           </>
           }
         <Modal show={this.state.showAlert} onHide={() => this.setState({showAlert: false})}>
@@ -90,10 +102,10 @@ class ArticlePage extends React.Component {
           </Modal.Header>
           <Modal.Body>{i18n.t("post.you-should-be-logged-in")}</Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={() => this.setState({showAlert: false})}>
-              {i18n.t("common.cancel")}
+            <Button variant="danger" onClick={() => this.setState({showAlert: false})}>
+              {i18n.t("common.btn-cancel")}
             </Button>
-            <Button variant="primary" onClick={() => this.setState({showAlert: false})}>
+            <Button variant="success" onClick={() => history.push("/login")}>
               {i18n.t("post.nav-to-login")}
             </Button>
           </Modal.Footer>

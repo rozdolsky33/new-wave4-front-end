@@ -17,6 +17,7 @@ import RegistrationPage from "./authorization/registration";
 import ForgotPasswordPage from "./authorization/forgot-password";
 import ResetPasswordPage from "./authorization/reset-password";
 import ResultPage from "./pages/result";
+import './app.css';
 
 export const history = createBrowserHistory();
 export default class App extends React.Component {
@@ -42,7 +43,10 @@ export default class App extends React.Component {
             <Route path="/login" component={LoginPage} />
             <Route path="/registration" component={RegistrationPage} />
             <Route path="/forgot-password" component={ForgotPasswordPage} />
-            <Route path="/password-reset/:token" component={ResetPasswordPage} />
+            <Route path="/password-reset/:token"
+                   component={(props) => <ResetPasswordPage passwordReset={true} token={props.match.params.token} />} />
+            <Route path="/assign-admin/:token"
+                   component={(props) => <ResetPasswordPage passwordReset={false} token={props.match.params.token} />} />
 
             <Route path="/result/:token?" component={ResultPage} />
           </Router>

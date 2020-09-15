@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import {Table, Button, Col, Tab, Tabs, Alert} from "react-bootstrap";
+import {Table, Button, Col, Tab, Tabs, Alert, Form} from "react-bootstrap";
 import AddEditModal from "./addEditModal";
 import PaginationPanel from "../common/pagination-panel";
 import { actionCreators } from "../../store/main/Main-actions";
@@ -9,12 +9,14 @@ import Row from "react-bootstrap/Row";
 import {withTranslation} from "react-i18next";
 import i18n from "../../i18n";
 import {history} from "../App";
+import SetAdminRoleModal from "./setAdminRoleModal";
 
 class AdminPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      role: (this.props.user && this.props.user.role) || localStorage.getItem("role") || ""
+      role: (this.props.user && this.props.user.role) || localStorage.getItem("role") || "",
+      setAdminRoleModalShown: false
     };
     this.selectPage = this.selectPage.bind(this);
     this.changeActiveTab = this.changeActiveTab.bind(this);
@@ -36,39 +38,63 @@ class AdminPage extends React.Component {
       <thead>
       <tr>
         <th>#</th>
-        <th>{i18n.t("admin.title")}</th>
-        <th>{i18n.t("admin.author")}</th>
-        <th>{i18n.t("admin.date")}</th>
-        <th>X</th>
+
+        {this.props.activeItems === "users" ?
+          <>
+            <th>{i18n.t("admin.role")}</th>
+            <th>{i18n.t("common.first-name")}</th>
+            <th>{i18n.t("common.last-name")}</th>
+            <th>{i18n.t("common.email")}</th>
+          </> :
+          <>
+            <th>{i18n.t("admin.active")}</th>
+            <th>{i18n.t("admin.title")}</th>
+            <th>{i18n.t("admin.author")}</th>
+            <th>{i18n.t("admin.date")}</th>
+          </>
+        }
+        <th>{i18n.t("admin.actions")}</th>
       </tr>
       </thead>
       <tbody>
       {
         this.props.items.map((item, key) => {
           return (
-            <tr key={item.id} onClick={async() => {
-              if (this.props.activeItems === "users"){
-                await this.props.setAdminRole(item.email);
-                history.push("/result");
-              } else {
-                this.props.toggleAddEditModal(true, item);
-              }
-            }}>
+            <tr key={item.id}>
               <td>{item.id || key}</td>
               {this.props.activeItems === "users" ?
                 <>
+                  <td>
+                    {item.roleName && item.roleName.indexOf("ADMIN") > -1 &&
+                    <i className="fa fa-lock ml-1"></i>}
+                  </td>
                   <td className="text-left">{item.firstName}</td>
                   <td className="text-left">{item.lastName}</td>
                   <td className="text-left">{item.email}</td>
                 </> :
                 <>
+                  <td>
+                    <Form.Check type="checkbox" checked={item.active}
+                                onChange={async (e) => {
+                                  e.stopPropagation();
+                                  e.preventDefault();
+                                  await this.props.addEditItem(this.props.activeItems, {...item, active: e.target.checked}, true);
+                                  this.props.getItemsList(this.props.activeItems, 0, this.props.paginationConfig.size);
+                                }} />
+                  </td>
                   <td className="text-left">{item.title}</td>
                   <td>{item.author}</td>
                   <td>{new Date(item.date).toDateString()}</td>
                 </>
               }
-              <td>
-                <Button variant="danger" size="sm" onClick={(e) => this.deleteItem(e, item)}>X</Button>
+              <td className="d-flex justify-content-center align-items-stretch">
+                {this.props.activeItems === "users" ||
+                <Button variant="success" size="sm" className="mr-2"
+                        onClick={(e) => this.props.toggleAddEditModal(true, item)}>
+                  <i className="fa fa-edit"></i></Button>}
+                <Button variant="danger" size="sm" onClick={(e) => this.deleteItem(e, item)}>
+                  <i className="fa fa-trash"></i></Button>
+
               </td>
             </tr>);
         })
@@ -79,24 +105,30 @@ class AdminPage extends React.Component {
 
   async deleteItem(e, item) {
     e.stopPropagation();
-    await this.props.deleteItem(this.props.activeItems, item.id);
+    await this.props.deleteItem(this.props.activeItems, item.id || item.userId);
     this.props.getItemsList(this.props.activeItems, 0, this.props.paginationConfig.size);
   }
 
   componentWillMount() {
     this.props.getItemsList(this.props.activeItems, 0, this.props.paginationConfig.size);
+    this.props.getAuthor(localStorage.getItem("userId"));
   }
 
   render() {
     return (
       <Col className="text-center" xs md={{ span: 10, offset: 1 }}>
-        <Row className="pt-3 d-flex justify-content-end">
+        {!!this.props.errorMessage && <Row className="pt-3">
           <Col>
-            {!!this.props.errorMessage && (
-              <Alert variant="danger" className="mt-3">
-                {this.props.errorMessage}
-              </Alert>
-            )}
+            <Alert variant="danger" className="mt-3">
+              {i18n.t(this.props.errorMessage)}
+            </Alert>
+          </Col>
+        </Row>}
+        <Row className="pt-3 mb-3">
+          <Col className="mt-3 d-flex justify-content-start">
+            <Button variant="secondary"
+                    disabled={this.state.role.indexOf("SUPER_ADMIN") < 0 }
+                    onClick={()=> this.setState({setAdminRoleModalShown: true})}>{i18n.t("admin.btn-set-admin-role")}</Button>
           </Col>
           <Col className="mt-3 d-flex justify-content-end">
             <PaginationPanel {...this.props.paginationConfig}
@@ -115,14 +147,20 @@ class AdminPage extends React.Component {
           {this.state.role.indexOf("SUPER_ADMIN") >= 0 &&
           <Tab eventKey="users" title={i18n.t("admin.users")}>
             {this.getContentTable()}
-          </Tab>
-          }
+          </Tab>}
         </Tabs>
-        <Button variant="primary" size="lg" className="fixed-bottom m-3"
-                onClick={() => {this.props.toggleAddEditModal(true)}}>
-          +
-        </Button>
+        {this.props.activeItems !== "users" &&
+          <Button variant="secondary" size="lg" className="fixed-bottom m-3"
+                  onClick={() => {this.props.toggleAddEditModal(true)}}>+</Button>
+        }
         {this.props.addEditModalShown && <AddEditModal />}
+        {this.state.setAdminRoleModalShown && <SetAdminRoleModal closeModal={async(email) => {
+          this.setState({setAdminRoleModalShown: false});
+          if (email) {
+            await this.props.sendAdminRoleRequest(email);
+            history.push("/result");
+          }
+        }}/>}
       </Col>
     );
   }

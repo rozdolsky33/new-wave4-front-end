@@ -17,7 +17,7 @@ class ForgotPasswordPage extends React.Component {
   render() {
     return (
       <Col className="text-center" xs md={{ span: 8, offset: 2 }}>
-        <h2 className="p-3 text-primary">{i18n.t("forgot-password.title")}</h2>
+        <h2 className="p-3 text-secondary">{i18n.t("forgot-password.title")}</h2>
         <Form onSubmit={(e) => this.sendPassResetRequest(e)} className="text-left">
           <Form.Group controlId="email">
             <Form.Label>{i18n.t("forgot-password.email")}</Form.Label>
@@ -27,8 +27,7 @@ class ForgotPasswordPage extends React.Component {
         </Form>
         {!!this.props.errorMessage && (
           <Alert variant="danger" className="mt-3">
-            {this.props.errorMessage}
-          </Alert>
+            {i18n.t(this.props.errorMessage)}</Alert>
         )}
       </Col>
     );

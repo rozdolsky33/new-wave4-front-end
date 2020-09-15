@@ -25,15 +25,20 @@ export const actionCreators = {
       dispatch({ type: actionType.receivedLikesType, response });
     }
   },
-  toggleLike: (postType, postId, userId) => async (dispatch) => {
+  toggleLike: (postType, postId, userId, likeId) => async (dispatch) => {
     dispatch({ type: actionType.requestType });
-    let url = `${host}/v1/api/${postType}/posts/${postId}/like/user/${userId}`;
-    let response = await fetch(url, getParams('GET', true));
+    let response = undefined;
+    if (likeId) {
+      let url = `${host}/v1/api/${postType}/posts/${postId}/like/${likeId}/user/${userId}`;
+      response = await fetch(url, getParams('DELETE', true));
+    } else {
+      let url = `${host}/v1/api/${postType}/posts/${postId}/like/user/${userId}`;
+      response = await fetch(url, getParams('POST', true));
+    }
     if (!response.ok) {
       dispatch({ type: actionType.requestFailedType, error: response.status });
     } else {
-      response = await response.json();
-      dispatch({ type: actionType.receivedItemType, response });
+      dispatch({ type: actionType.requestPassedType});
     }
   },
   getComments: (postType, postId) => async (dispatch) => {
@@ -56,17 +61,18 @@ export const actionCreators = {
     let response = await fetch(url, params);
     if (!response.ok) {
       dispatch({ type: actionType.requestFailedType, error: response.status });
+    } else {
+      dispatch({ type: actionType.requestPassedType });
     }
   },
   deleteComment: (postId, commentId, userId) => async (dispatch) => {
     dispatch({ type: actionType.requestType });
     let url = `${host}/v1/api/blog/posts/${postId}/comments/${commentId}/userId/${userId}`;
-    let response = await fetch(url, getParams('GET', true));
+    let response = await fetch(url, getParams('DELETE', true));
     if (!response.ok) {
       dispatch({ type: actionType.requestFailedType, error: response.status });
     } else {
-      response = await response.json();
-      dispatch({ type: actionType.receivedItemType, response });
+      dispatch({ type: actionType.requestPassedType});
     }
   },
 };

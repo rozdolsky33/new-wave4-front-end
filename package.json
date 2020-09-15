@@ -5,9 +5,10 @@
   "dependencies": {
     "babel-loader": "^8.0.6",
     "bootstrap": "^4.3.1",
+    "ckeditor4-react": "^1.1.0",
     "i18next": "^19.4.3",
     "i18next-xhr-backend": "^3.2.2",
-    "node-sass": "^4.13.1",
+    "node-sass": "^4.14.1",
     "react": "^16.11.0",
     "react-bootstrap": "^1.0.0-beta.14",
     "react-datepicker": "^2.13.0",
@@ -19,7 +20,8 @@
     "react-router-redux": "^4.0.8",
     "react-scripts": "^3.4.0",
     "redux": "^4.0.5",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "universal-cookie": "^4.0.3"
   },
   "scripts": {
     "start": "react-scripts start",

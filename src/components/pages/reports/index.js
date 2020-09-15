@@ -6,7 +6,7 @@ import i18n from "../../../i18n";
 function ReportsPage() {
   return (
     <Col className="text-center" xs md={{ span: 8, offset: 2 }}>
-      <h2 className="p-3 text-primary">{i18n.t("reports.title")}</h2>
+      <h2 className="p-3 text-secondary">{i18n.t("reports.title")}</h2>
       <p>{i18n.t("error.page-is-not-ready")}</p>
     </Col>
   );

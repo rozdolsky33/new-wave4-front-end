@@ -23,14 +23,15 @@ export default function reducer (state, action) {
     case actionType.requestFailedType: {
       return {
         ...state,
-        errorMessage: action.errorMessage || `Something went wrong, error code - ${action.error}`,
+        errorMessage: action.errorMessage || 'error.common',
         isLoading: false
       };
     }
     case actionType.receivedItemType: {
+      const newItem = action.response;
       return {
         ...state,
-        selectedItem: action.response,
+        selectedItem: {...newItem, date: newItem.date.slice(0, -9)},
         isLoading: false
       };
     }

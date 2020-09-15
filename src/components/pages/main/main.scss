@@ -16,7 +16,7 @@
     }
 
     .photo-view {
-      object-fit: contain;
+      object-fit: cover;
       object-position: top;
       width: 100%;
       height: 100%;
@@ -33,14 +33,18 @@
   }
 }
 
-.main-description-block {
-  margin-top: 470px;
+.main-cover img {
+  height: 430px;
+  width: 100%;
+  object-fit: cover;
+  object-position: bottom;
 
-  @media (max-width: 767px) {
-    margin-top: 200px;
+  @media (max-width: 400px) {
+    height: 200px;
   }
 }
 
 .main-recent-block {
   opacity: 0.6;
+  background-image: url("../../../assets/NW_background.jpg")
 }
